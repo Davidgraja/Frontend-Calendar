@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './loginPage.css';
-import { useForm } from '../../hooks';
+import { useAuthStore, useForm } from '../../hooks';
+import Swal from 'sweetalert2';
 
 const loginFormFields = {
     loginEmail  : '',
@@ -15,25 +16,47 @@ const registerFormFields = {
 }
 
 
-
 export const LoginPage = () => {
 
-    const {loginEmail,loginPassword ,onEventInput : onLoginEventInput} = useForm(loginFormFields);
+    const {startLogin, startRegister ,errorMessage } = useAuthStore();
 
+
+    const {loginEmail,loginPassword ,onEventInput : onLoginEventInput , onResetForm} = useForm(loginFormFields);
     const loginOnSubmit = (event) =>{
+    
         event.preventDefault();
 
-        console.log({loginEmail , loginPassword})
+        if( !loginEmail || !loginPassword) return;
+
+        startLogin({ email: loginEmail ,password:loginPassword});
     }
     
-    const {registerName , registerEmail ,registerPassword ,registerPassword2,onEventInput : onRegisterEventInput} = useForm(registerFormFields);
-    
-    
-    const registerOnSubmit = (event) =>{
+
+    const {registerName , registerEmail ,registerPassword ,registerPassword2, onEventInput : onRegisterEventInput , onResetForm : onRegisterResetForm } = useForm(registerFormFields);
+    const registerOnSubmit =  (event) =>{
+        
         event.preventDefault();
 
-        console.log({registerEmail , registerName , registerPassword , registerPassword2})
+        if(!registerEmail || !registerName || !registerPassword || !registerPassword2) return;
+
+        if(registerPassword !== registerPassword2) {
+            return Swal.fire('Error en el registro' , 'las contraseñas no son iguales' , 'error')
+        }
+
+        startRegister({ email :registerEmail , name: registerName , password : registerPassword });
+
     }
+
+
+    useEffect(() => {
+    
+        if(errorMessage){
+            Swal.fire('Uhs! , Ha ocurrido un error' , errorMessage , 'error')
+        }
+
+    }, [errorMessage])
+    
+
     return (
         <div className="container login-container">
             <div className="row">
