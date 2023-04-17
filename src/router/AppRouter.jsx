@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { LoginPage } from '../auth';
+import { CheckingPage, LoginPage } from '../auth';
 import { CalendarPage } from '../calendar';
 import { useAuthStore } from '../hooks';
 
@@ -13,9 +13,14 @@ export const AppRouter = () => {
   }, [])
   
 
+  if(status === 'checking'){
+    return <CheckingPage/>
+  }
+
   return (
 
     <Routes>
+
       {
         ( status == 'not-authenticated' )   ? 
           <>
@@ -29,7 +34,6 @@ export const AppRouter = () => {
 
         </> 
       }
-
 
     </Routes>
 

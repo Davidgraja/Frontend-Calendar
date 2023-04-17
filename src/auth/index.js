@@ -1,1 +1,2 @@
-export * from '../auth/pages/LoginPage'
+export * from './pages/LoginPage';
+export * from './pages/CheckingPage';
