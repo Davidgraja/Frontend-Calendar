@@ -31,7 +31,7 @@ Modal.setAppElement('#root');
 export const CalendarModal = () => {
     
     //* Custom hooks :   
-    const { activeEvent  , startSavingEvent} = useCalendarStore();
+    const { activeEvent  , startSavingEvent ,setActiveEvent} = useCalendarStore();
     const { isTheModalOpen , closeDateModal } = useUiStore();
 
     // * useStates hooks :
@@ -93,6 +93,7 @@ export const CalendarModal = () => {
 
     const onCloseModal = () =>{
         closeDateModal();
+        setActiveEvent(null)
     }
 
     const onSubmitEvent = async (event) =>{

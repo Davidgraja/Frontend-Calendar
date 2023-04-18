@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 export const calendarSlice = createSlice({
     name: 'calendar',
     initialState : {
-
+        
+        isLoadingEvents : true ,
         events : [] , 
         activeEvent : null
 
@@ -17,7 +18,6 @@ export const calendarSlice = createSlice({
         }, 
 
         onAddNewEvent : ( state , { payload }) => {
-
             state.events.push( payload );
             state.activeEvent = null; 
         },
@@ -39,13 +39,18 @@ export const calendarSlice = createSlice({
                 state.activeEvent = null; 
             }
 
+        } ,
+
+        onLoadingEvents : (state , {payload = []}) => {
+
+            state.isLoadingEvents = false;
+            state
+
         }
-
-
     }
     
 
 })
 
 // Action creators are generated for each case reducer function
-export const {  onsetActiveEvent , onAddNewEvent  , onUpdateEvent  , onDeleteEvent} = calendarSlice.actions
+export const {  onsetActiveEvent , onAddNewEvent  , onUpdateEvent  , onDeleteEvent , onLoadingEvents} = calendarSlice.actions
