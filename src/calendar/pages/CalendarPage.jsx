@@ -5,20 +5,23 @@ import { Navbar , CalendarEvent, CalendarModal, FabAddNew, FabDelete } from '../
 
 import { localizer , getMessagesEs } from '../../helpers'
 import { useEffect, useState } from 'react'
-import { useUiStore , useCalendarStore } from '../../hooks'
+import { useUiStore , useCalendarStore , useAuthStore } from '../../hooks'
 
 
 
 export const CalendarPage = () => {
   const { events , setActiveEvent , startLoadingEvents } = useCalendarStore();
-  const { openDateModal } = useUiStore()
+  const { openDateModal } = useUiStore();
+  const { user } = useAuthStore();
   const [ lastview , setLastView] = useState(localStorage.getItem('lastview') || 'agenda' )
 
 
   const eventStyleGetter = (event , start , end , isSelected) =>{
 
+    const isMyEvent = (  user.uid == event.user._id ) || (  user.uid == event.user.uid )
+
     const style = {
-      backgroundColor : '#23C7B3',
+      backgroundColor : isMyEvent ? '#23C7B3' : '#7F8C8D',
       borderRadius : '8px',
       opacity : 0.8,
       color: 'white'
