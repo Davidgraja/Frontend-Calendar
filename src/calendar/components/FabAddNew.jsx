@@ -15,7 +15,7 @@ export const FabAddNew = () => {
             start : new Date(),
             end : addHours(new Date() , 2),
             user :{
-                id : user.uid,
+                uid : user.uid,
                 name : user.name
             }
         })
