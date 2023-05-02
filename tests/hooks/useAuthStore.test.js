@@ -1,7 +1,7 @@
 import { authSlice } from "../../src/store";
 import { configureStore } from "@reduxjs/toolkit";
 import { initialState, notAuthenticatedState } from "../fixtures/authStates";
-import { act, renderHook } from "@testing-library/react";
+import { act, renderHook, waitFor } from "@testing-library/react";
 import { useAuthStore } from "../../src/hooks";
 import { Provider } from "react-redux";
 import { testUserCredentials } from "../fixtures/testUser";
@@ -44,8 +44,8 @@ describe('pruebas sobre useAuthStore.js', () => {
 
 
     
-    test(' startLogin debe de reañizar el login correctamente',  async () => {
-
+    test(' startLogin debe de realizar el login correctamente',  async () => {
+        localStorage.clear();
         const  mockStore = getMockStore(notAuthenticatedState);
 
         const { result } = renderHook( ()=>  useAuthStore()    , {
@@ -66,6 +66,33 @@ describe('pruebas sobre useAuthStore.js', () => {
 
         expect(localStorage.getItem('token')).toEqual(expect.any(String))
         expect(localStorage.getItem('token-init-date')).toEqual(expect.any(String))
+    })
+
+    test('startLogin debe  fallar la autenticación', async () => {    
+        localStorage.clear();
+        const  mockStore = getMockStore(initialState);
+
+        const { result } = renderHook( ()=>  useAuthStore()    , {
+            wrapper : ({children}) => <Provider store={ mockStore } > {children } </Provider>
+        })
+
+        await  act( async ()=>{
+            await result.current.startLogin({ email : 'testPrueba@gmail.com' , password:'451236'});
+        })
+        
+        const { errorMessage , user , status} = result.current;
+
+        expect(localStorage.getItem('token')).toBe(null)
+        expect({ errorMessage , user , status}).toEqual({
+            errorMessage : expect.any(String),
+            user  :  {},
+            status : 'not-authenticated'
+        })
+
+        waitFor(
+            () => expect(result.current.errorMessage).toBe(undefined)
+        )
+
     })
 
 })
