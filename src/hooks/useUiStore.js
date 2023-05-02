@@ -21,7 +21,7 @@ export const useUiStore = () =>{
     //* manage the two functions in the same method
     const toggleDateModal = () => {
         
-        return ( isTheModalOpen ) ? dispatch( onCloseModal() ) : dispatch( openDateModal() )
+        return ( isTheModalOpen ) ?  closeDateModal()  :  openDateModal() 
 
     }
 
