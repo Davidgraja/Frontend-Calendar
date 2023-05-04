@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 
 // custom hooks 
 import { useCalendarStore, useUiStore } from '../../hooks';
+import { getEnvVariables } from '../../helpers';
 
 
 registerLocale('es' , es);
@@ -26,7 +27,10 @@ const customStyles = {
     },
 };
 
-Modal.setAppElement('#root');
+if( getEnvVariables().VITE_MODE !== 'test'){
+
+    Modal.setAppElement('#root');
+}
 
 export const CalendarModal = () => {
     
