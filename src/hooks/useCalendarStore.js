@@ -33,7 +33,7 @@ export const useCalendarStore = () => {
             dispatch( onAddNewEvent( { id : data.event.id ,...calendarEvent  } ) )
             
         } catch (error) {
-            console.log(error);
+            console.log(error.response.data);
             Swal.fire('Error al guardar' , error.response.data.msg , 'error');
         }
         
