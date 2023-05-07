@@ -5,7 +5,7 @@ import { useCalendarStore } from "../../src/hooks";
 
 jest.mock('../../src/hooks/useCalendarStore')
 
-describe('pruebas sobre <fabDelete/>', () => { 
+describe('pruebas sobre <fabDelete.jsx/>', () => { 
 
     const mockStartDeleteEvent = jest.fn();
 

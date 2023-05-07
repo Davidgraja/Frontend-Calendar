@@ -1,12 +1,11 @@
-import { configureStore, createSerializableStateInvariantMiddleware,  } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { authSlice } from "../../src/store";
-import { calendarWithEventsState, events, initialState } from "../fixtures/calendarStates";
+import { calendarWithActiveEventState, calendarWithEventsState, events, initialState } from "../fixtures/calendarStates";
 import { authenticatedState } from "../fixtures/authStates";
 import { act, renderHook } from "@testing-library/react";
 import { useCalendarStore } from "../../src/hooks";
 import { Provider } from "react-redux";
 import {calendarSlice} from '../../src/store/calendar/calendarSlice';
-import { testUserCredentials } from "../fixtures/testUser";
 import { calendarApi } from "../../src/api";
 
 const getMockStore = (calendarStates , authStates) =>{
@@ -29,7 +28,7 @@ const getMockStore = (calendarStates , authStates) =>{
 
 describe('Pruebas sobre useCalendarStore', () => {
 
-    beforeEach(()=> jest.clearAllMocks())
+    beforeEach(()=> jest.clearAllMocks());
     
     test('Debe de retornar los valores por defecto', () => { 
 
@@ -52,6 +51,7 @@ describe('Pruebas sobre useCalendarStore', () => {
 
     })
 
+
     test('setActiveEvent debe de llamar la funcion onsetActiveEvent ' , ()=> {
 
         const mockStore = getMockStore(calendarWithEventsState , authenticatedState)
@@ -69,6 +69,7 @@ describe('Pruebas sobre useCalendarStore', () => {
         expect(result.current.hasEventSelected).toBeTruthy();
     
     })
+
 
     test('startSavingEvent debe de actualizar un evento', async () => { 
 
@@ -92,7 +93,7 @@ describe('Pruebas sobre useCalendarStore', () => {
         });
 
         await act( async ()=>{
-            await result.current.startSavingEvent(UpdateEvent)
+            await result.current.startSavingEvent(UpdateEvent);
         });
 
         expect(result.current.events[0]).toEqual({
@@ -101,8 +102,8 @@ describe('Pruebas sobre useCalendarStore', () => {
         });
 
         spy.mockRestore();
-
     })
+
 
     test('startSavingEvent debe de crear un evento', async () => { 
 
@@ -140,7 +141,6 @@ describe('Pruebas sobre useCalendarStore', () => {
     })
 
 
-    
     test('startSavingEvent debe de capturar el error ', async () => { 
 
         const newEvent ={
@@ -158,31 +158,59 @@ describe('Pruebas sobre useCalendarStore', () => {
             wrapper : ({children}) => <Provider store={ mockStore }> { children } </Provider>
         })
 
-
-        // await act( async ()=>{
-        //     await result.current.startSavingEvent(newEvent)            
-        // });
-
-        try {
-            await result.current.startSavingEvent(newEvent)            
-            
-        } catch (error) {
-            expect(error).toEqual({
-                ok: false,
-                msg: 'No se ha recibido el token' 
-            })
-        }
-
-        // expect.assertions(1);
-        // await  expect(result.current.startSavingEvent(newEvent)).resolves.toEqual({
-        //     ok: false,
-        //     msg: 'No se ha recibido el token' 
-        // })
-
-        // expect(result.current.events.length).toBe(3);
-        // expect(result.current.events).toContainEqual({...newEvent , id : '3'});
-
+        await expect(result.current.startSavingEvent(newEvent)).rejects.toThrowError('No se ha recibido el token')            
     })
 
+
+    test('startDeleteEvent debe de eliminar si hay un elemento activo', async () => { 
+
+        const mockStore = getMockStore(calendarWithActiveEventState , authenticatedState);
+
+        const { result } = renderHook(()=> useCalendarStore() , {
+
+            wrapper : ({children}) => <Provider store={ mockStore }> { children } </Provider>
+        });
+
+        const spy = jest.spyOn(calendarApi ,'delete').mockReturnValue({
+            data :{
+                ok : true
+            }
+        });
+
+        await act( async ()=>{
+            await result.current.startDeleteEvent()
+        });
+
+        expect(result.current.activeEvent).toBe(null);
+        expect(result.current.events.length).toBe(1);
+        
+        spy.mockRestore();
+    })
+
+    
+    test('startLoadingEvents debe de cargar las notas', async () => { 
+
+        const mockStore = getMockStore(initialState , authenticatedState);
+
+        const { result } = renderHook(()=> useCalendarStore() , {
+
+            wrapper : ({children}) => <Provider store={ mockStore }> { children } </Provider>
+        });
+
+        const spy = jest.spyOn(calendarApi ,'get').mockReturnValue({
+            data :{
+                ok : true,
+                events : events
+            }
+        });
+
+        await act( async ()=>{
+            await  result.current.startLoadingEvents()
+        });
+
+        expect(result.current.events).toEqual(events)
+
+        spy.mockRestore();
+    })
 
 })

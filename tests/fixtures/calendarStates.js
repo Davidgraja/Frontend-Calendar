@@ -30,7 +30,7 @@ export const calendarWithEventsState = {
 }
 
 export const calendarWithActiveEventState = {
-    isLoadingEvents : true ,
+    isLoadingEvents : false ,
     events : [ ...events ] , 
     activeEvent : { ...events[0] }
 }

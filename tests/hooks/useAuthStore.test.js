@@ -93,11 +93,12 @@ describe('pruebas sobre useAuthStore.js', () => {
             user  :  {},
             status : 'not-authenticated'
         })
-
+        
+        
         waitFor(
-            () => expect(result.current.errorMessage).toBe(undefined)
+            () =>  expect(result.current.errorMessage).toBe(undefined)
         )
-
+            
     })
 
     test('startRegister debe de crear un usuario', async () => {
@@ -172,7 +173,7 @@ describe('pruebas sobre useAuthStore.js', () => {
     })
 
     
-    test('startCheckAuthToken debe de autehnticar al usuario si hay un token ', async () => { 
+    test('startCheckAuthToken debe de authenticar al usuario si hay un token ', async () => { 
 
         const { data } = await calendarApi.post('/auth' , testUserCredentials);
 
@@ -196,7 +197,6 @@ describe('pruebas sobre useAuthStore.js', () => {
             user: { name: 'Test user', uid: '64481fb1168f3a2e902ef89e' },
             status: 'authenticated'
         })
-
     })
 
 })
