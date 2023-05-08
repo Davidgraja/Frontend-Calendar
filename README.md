@@ -62,11 +62,23 @@ Ademas se hacen uso de otros paquetes de node js como :
 - [react-modal](https://www.npmjs.com/package/react-modal)
 - [sweetalert2](https://sweetalert2.github.io/)
 
+## Testing :
+
+Se ha añadido el modulo de testing a la aplicación , si deseas ejecutar las pruebas solo es es necesario que ejecutes los siguientes pasos :
+- Clona este repositorio :  ``` git clone git@github.com:Davidgraja/Frontend-Calendar.git``` 
+
+- Navega hacia la carpeta Frontend-Calendar : ``` cd Frontend-Calendar ```
+
+- Reconstruye los modulos de node : ``` yarn install ```
+
+
+- ejecuta los test : ``` yarn test ```
+
+ de esa manera se ejecutaran todas las pruebas
+
+
 ## información adicional:
 Esta aplicación fue creada desde cero , tanto la parte de frontend como el backend , todo esto para afianzar mis conocimientos en ambas áreas , si desean solo hacer uso del backend  e implementar su  propio frontend , pueden ver la documentación de este servicio en : [Github Backend-calendar](https://github.com/Davidgraja/Backend-Calendar)
 
-### Testing :
-
-Se ha añadido el modulo de testing a la aplicación , si deseas ejecutar las pruebas solo es es necesario que ejecutes el comando ``` yarn test ``` de esa manera se ejecutaran todas las pruebas
 
 por ultimo puedes ver y hacer uso de esta app en [calendar app ](https://marvelous-medovik-7dc29f.netlify.app)  , disfrutalo !!👋
