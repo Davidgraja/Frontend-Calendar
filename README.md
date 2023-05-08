@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-
-=======
->>>>>>> testing
 # Calendar app 🗓️
 
 Calendar App es un proyecto enfocado a trabajo colaborativo , en este , un grupo de personas podran añadir y ver eventos en un calendario , ademas de otras funcionalidades 
