@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { onAddNewEvent, onsetActiveEvent , onUpdateEvent , onDeleteEvent , onLoadingEvents } from "../store/calendar/calendarSlice";
 import calendarApi from "../api/calendarApi";
-import { convertEventsToDateEvents } from "../helpers";
+import { convertEventsToDateEvents, getEnvVariables } from "../helpers";
 import Swal from "sweetalert2";
 
 
@@ -33,8 +33,9 @@ export const useCalendarStore = () => {
             dispatch( onAddNewEvent( { id : data.event.id ,...calendarEvent  } ) )
             
         } catch (error) {
-            console.log(error);
+            
             Swal.fire('Error al guardar' , error.response.data.msg , 'error');
+            throw new Error(error.response.data.msg);
         }
         
     }
@@ -48,8 +49,10 @@ export const useCalendarStore = () => {
             dispatch( onDeleteEvent());
             
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             Swal.fire('Error al eliminar' , error.response.data.msg , 'error');
+            throw new Error(error.response.data.msg);
+            
         }
     }
 
@@ -58,16 +61,23 @@ export const useCalendarStore = () => {
 
         try {
 
-            const {data} = await calendarApi.get('/events');
+            const { data } = await calendarApi.get('/events');
+            
+            //? config for the testting
+            if( getEnvVariables().VITE_MODE === 'test'){
+                
+                return dispatch(onLoadingEvents(data.events));
+
+            }
+
+
             const events = convertEventsToDateEvents(data.events);
             dispatch(onLoadingEvents(events));
-
+            
         } catch (error) {
-
-            console.log('Error al cargar los eventos');
             Swal.fire('Error al cargar los eventos' , error.response.data.msg , 'error');
-
-
+            throw new Error(error.response.data.msg);
+        
         }
 
     }
