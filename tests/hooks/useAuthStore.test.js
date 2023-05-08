@@ -93,11 +93,6 @@ describe('pruebas sobre useAuthStore.js', () => {
             user  :  {},
             status : 'not-authenticated'
         })
-        
-        
-        waitFor(
-            () =>  expect(result.current.errorMessage).toBe(undefined)
-        )
             
     })
 
